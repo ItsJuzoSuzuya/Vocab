@@ -1,6 +1,6 @@
 <?php header("Access-Control-Allow-Origin: *");
 
-include "../define.php";
+include "./define.php";
 
 $db = new mysqli( HOST, USER, PASSWORD, DB_NAME,PORT);
 if (isset($_POST["language"])) {

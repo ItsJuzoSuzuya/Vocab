@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  php:
+    build:
+      context: .
+      target: php_stage
+    ports:
+      - "9000:9000"
+    volumes:
+      - './databases:/opt/databases'
