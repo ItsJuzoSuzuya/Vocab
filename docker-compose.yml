@@ -1,11 +1,21 @@
-version: '3.8'
-
 services:
-  php:
+  php-fpm:
     build:
       context: .
-      target: php_stage
-    ports:
-      - "9000:9000"
+      dockerfile: Dockerfile
     volumes:
-      - './databases:/opt/databases'
+      - ./databases:/var/www/html
+    networks:
+      - default
+
+  web:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./databases:/var/www/html
+      - ./databases/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php-fpm
+    networks:
+      - default
