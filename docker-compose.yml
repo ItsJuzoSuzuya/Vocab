@@ -1,21 +1,45 @@
+version: '3.8'
+
 services:
-  php-fpm:
+  mariadb:
+    container_name: db
+    image: mariadb:10.9.8
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+    volumes:
+      - ./mysqldata:/var/lib/mysql
+
+  php:
+    container_name: php
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: php-dockerfile
     volumes:
       - ./databases:/var/www/html
-    networks:
-      - default
+      - ./php-logging.conf:/usr/local/etc/php-fpm.d/zz-log.conf
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    depends_on:
+      - mariadb
 
-  web:
+  nginx:
+    container_name: web
     image: nginx:latest
     ports:
-      - "8080:80"
+      - "8080:8080"
     volumes:
       - ./databases:/var/www/html
       - ./databases/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - php-fpm
-    networks:
-      - default
+      - php
+
+

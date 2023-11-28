@@ -86,7 +86,7 @@ const LanguageBody = ({navigation}) => {
                     </Pressable>
                     <Pressable
                         style={bodyStyles.addButton}
-                        onPress={() => {saveLanguage('English'); setShowNewLanguage(false)}}
+                        onPress={() => {saveLanguage('Japanese'); setShowNewLanguage(false)}}
                     >
                         <Text> Japanese </Text>
                     </Pressable>

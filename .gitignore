@@ -1,1 +1,4 @@
-databases/define.php
+.env
+mysqldata/
+app/.expo/
+app/node_modules/

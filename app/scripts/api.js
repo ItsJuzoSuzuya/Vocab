@@ -1,5 +1,5 @@
 export function saveLanguageToDB(language) {
-    const url = "http://localhost:9000/db.php";
+    const url = "http://localhost:8080/db.php";
 
     fetch(url, {
         method: "POST",
@@ -8,7 +8,6 @@ export function saveLanguageToDB(language) {
         },
         body: `language=${encodeURIComponent(language)}`,
     })
-        .then((response) => response.json())
         .then((data) => {
             // Handle the response data as needed
             console.log('Success:', data);
@@ -19,7 +18,7 @@ export function saveLanguageToDB(language) {
 }
 
 export function getLanguages() {
-    const url = "http://localhost:9000/db.php";
+    const url = "http://localhost:8080/db.php";
 
     fetch(url, {
         method: "GET", // Assuming you are retrieving languages, use GET
