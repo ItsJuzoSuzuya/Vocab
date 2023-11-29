@@ -3,12 +3,11 @@ import {View, StyleSheet, Text, Pressable, ScrollView, TextInput} from "react-na
 import TopBar from "./TopBar";
 import NavBar from "./NavBar";
 import styles from "../scripts/style"
+import {fetchData} from "../scripts/api";
 
-const TopicBody = ({navigation, route}) => {
-    const { currentLanguage } = route.params;
-    const [showNewTopic, setShowNewTopic] = useState(false);
+export const TopicBody = ({navigation, route}) => {
+    const {currentLanguage} = route.params;
     const [topics, setTopics] = useState([]);
-    const [topicInput, setTopicInput] = useState('');
 
     useEffect(() => {
         const storedTopics = localStorage.getItem(currentLanguage + 'topics');
@@ -17,82 +16,35 @@ const TopicBody = ({navigation, route}) => {
         }
     }, []);
     const saveTopic = (topic) => {
+        fetchData('saveTopic',{topic: topic, language: currentLanguage});
         if (!topics.includes(topic)) {
             const updatedTopics = [...topics, topic];
             localStorage.setItem(currentLanguage + 'topics', JSON.stringify(updatedTopics));
             setTopics(updatedTopics);
         }
-        setTopicInput('');
     }
-
-    const renderView = () => {
-        if (showNewTopic) {
-            return newTopic();
-        } else {
-            return defaultTopicPage();
-        }
-    };
 
     const TopicButton = ({ topic }) => {
         return(
-            <Pressable style={bodyStyles.addButton}>
+            <Pressable style={styles.button}>
                 <Text> {topic} </Text>
             </Pressable>
         )
     }
 
-    const defaultTopicPage = () => {
-        return (
-            <View style={{ flex: 1 }}>
-                <TopBar navigation={navigation}/>
-                <ScrollView style={styles.body}>
-                    <Text> Welcome! </Text>
-                    {topics.map((topic) => (
-                        <TopicButton topic={topic} />
-                    ))}
-                    <Pressable
-                        style={bodyStyles.addButton}
-                        onPress={() => setShowNewTopic(true)}
-                    >
-                        <Text> + Add Topic</Text>
-                    </Pressable>
-                </ScrollView>
-                <NavBar navigation={navigation}/>
-            </View>
-        );
-    }
-
-    const newTopic = () => {
-        return (
-            <View style={{flex: 1}}>
-                <TopBar navigation={navigation}/>
-                <View style={styles.body}>
-                    <TextInput
-                        value={topicInput}
-                        onChangeText={setTopicInput}
-                        placeholder="Enter topic"
-                    />
-                    <Pressable onPress={() => {
-                        saveTopic(topicInput);
-                        setShowNewTopic(false)
-                    }}>
-                        <Text> Save </Text>
-                    </Pressable>
-                    <Pressable>
-                        <Text> Cancel </Text>
-                    </Pressable>
-                </View>
-            </View>
-        );
-    }
-
-    return renderView();
+    return (
+        <View style={{ flex: 1 }}>
+            <TopBar navigation={navigation}/>
+            <ScrollView style={styles.body}>
+                <Text> Welcome! </Text>
+                {topics.map((topic) => (
+                    <TopicButton topic={topic} />
+                ))}
+                <Pressable style={styles.button} onPress={() => navigation.navigate('NewTopic', { saveTopic })}>
+                    <Text> + Add Topic</Text>
+                </Pressable>
+            </ScrollView>
+            <NavBar navigation={navigation}/>
+        </View>
+    );
 }
-
-const bodyStyles = StyleSheet.create({
-    addButton: {
-        alignSelf: 'center'
-    }
-})
-
-export default TopicBody;

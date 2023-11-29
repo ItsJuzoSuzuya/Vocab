@@ -7,6 +7,9 @@ const styles = StyleSheet.create({
         gap: 26,
         flex: 1,
     },
+    button: {
+        alignSelf: 'center'
+    }
 })
 
 export default styles;
