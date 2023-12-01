@@ -4,7 +4,7 @@ import { faHome, faPlus, faCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
-export default function NavBar({navigation}){
+const NavBar = ({navigation}) =>{
     return(
         <View style={navBarStyles.navbar}>
             <Pressable onPress={() => navigation.navigate('LanguagePage')}>
@@ -37,3 +37,5 @@ const navBarStyles = StyleSheet.create({
         height: 20,
     }
 })
+
+export default NavBar;

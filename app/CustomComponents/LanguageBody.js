@@ -30,7 +30,7 @@ export const LanguageBody = ({navigation}) => {
 
     }, []);
 
-    const saveLanguage = async (language) => {
+    async function saveLanguage(language) {
         await fetchData('saveLanguage', {language: language});
         if (!languages.includes(language)) {
             const updatedLanguages = [...languages, language];
@@ -38,9 +38,9 @@ export const LanguageBody = ({navigation}) => {
 
             setLanguages(updatedLanguages);
         }
-    };
+    }
 
-    const syncLanguages = (dbData) => {
+    function syncLanguages(dbData) {
         let langSet = new Set(languages);
         console.log()
         for (let item of dbData) {
@@ -53,9 +53,9 @@ export const LanguageBody = ({navigation}) => {
     }
 
     const LanguageButton = ({language}) => {
-        const navigateToTopicPage = () => {
+        function navigateToTopicPage(){
             navigation.navigate('TopicPage', { currentLanguage: language });
-        };
+        }
 
         return(
             <Pressable style={styles.button} onPress={navigateToTopicPage}>

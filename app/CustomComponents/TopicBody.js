@@ -15,7 +15,7 @@ export const TopicBody = ({navigation, route}) => {
             setTopics(JSON.parse(storedTopics));
         }
     }, []);
-    const saveTopic = (topic) => {
+    function saveTopic(topic){
         fetchData('saveTopic',{topic: topic, language: currentLanguage});
         if (!topics.includes(topic)) {
             const updatedTopics = [...topics, topic];
@@ -25,8 +25,12 @@ export const TopicBody = ({navigation, route}) => {
     }
 
     const TopicButton = ({ topic }) => {
+        function navigateToModePage () {
+            navigation.navigate('ModePage', { currentLanguage: currentLanguage, currentTopic: topic });
+        }
+
         return(
-            <Pressable style={styles.button}>
+            <Pressable style={styles.button} onPress={navigateToModePage}>
                 <Text> {topic} </Text>
             </Pressable>
         )

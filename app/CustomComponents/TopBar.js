@@ -2,7 +2,7 @@ import React from "react";
 import { View, Image, StyleSheet, Pressable } from "react-native";
 import { useRoute } from '@react-navigation/native';
 
-function TopBar({ navigation }) {
+const TopBar = ({ navigation }) => {
     let route = useRoute();
 
     return (

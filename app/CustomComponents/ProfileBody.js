@@ -2,8 +2,7 @@ import React from "react";
 import {View} from "react-native";
 import TopBar from "./TopBar";
 import NavBar from "./NavBar";
-
-export default function ProfileBody({navigation}){
+const ProfileBody = ({navigation}) => {
     return (
         <View>
             <TopBar navigation={navigation}/>
@@ -11,3 +10,5 @@ export default function ProfileBody({navigation}){
         </View>
     );
 }
+
+export default ProfileBody;
