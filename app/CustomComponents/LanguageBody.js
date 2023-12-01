@@ -1,28 +1,56 @@
-import React, {useEffect, useState} from "react";
-import {View, Text, Pressable, ScrollView} from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, Pressable, ScrollView } from "react-native";
 import TopBar from "./TopBar";
 import NavBar from "./NavBar";
 import styles from "../scripts/style"
 import { fetchData } from "../scripts/api"
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const LanguageBody = ({navigation}) => {
     const [languages, setLanguages] = useState([]);
 
-    useEffect(() => {
-        const storedLanguages = localStorage.getItem('languages');
-        if (storedLanguages) {
-            setLanguages(JSON.parse(storedLanguages));
+    useEffect(  () => {
+        const getLanguages = async () => {
+            try {
+                const storedLanguages = await AsyncStorage.getItem('languages');
+                console.log(storedLanguages);
+                if (storedLanguages) {
+                    setLanguages(JSON.parse(storedLanguages));
+                }
+            } catch (e) {
+                console.log(e);
+            }
         }
+
+        getLanguages();
+
+        fetchData('getLanguage').then(data => {
+            syncLanguages(data)
+        });
+
     }, []);
-    const saveLanguage = (language) => {
-        fetchData('saveLanguage',  {language: language});
+
+    const saveLanguage = async (language) => {
+        await fetchData('saveLanguage', {language: language});
         if (!languages.includes(language)) {
             const updatedLanguages = [...languages, language];
-            localStorage.setItem('languages', JSON.stringify(updatedLanguages));
+            await AsyncStorage.setItem('languages', JSON.stringify(updatedLanguages));
 
             setLanguages(updatedLanguages);
         }
     };
+
+    const syncLanguages = (dbData) => {
+        let langSet = new Set(languages);
+        console.log()
+        for (let item of dbData) {
+            if (!langSet.has(item)) {
+                langSet.add(item);
+            }
+        }
+
+        setLanguages(Array.from(langSet));
+    }
 
     const LanguageButton = ({language}) => {
         const navigateToTopicPage = () => {

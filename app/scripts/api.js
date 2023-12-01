@@ -6,20 +6,22 @@ export function fetchData(requestType, requestData) {
         }
     );
 
-    console.log(requestData["language"]);
-    fetch('http://localhost:8080/db.php', {
+    return fetch('http://localhost:8080/db.php', {
         method: 'POST',
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
         },
         body: formBody,
     })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(data => {
-            // Handle the response data
             console.log(data);
+
+            if(data != null)
+                return data;
         })
         .catch(error => {
             console.error('Error:', error);
+            throw error;
         });
 }
