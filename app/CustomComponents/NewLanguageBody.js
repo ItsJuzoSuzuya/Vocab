@@ -3,10 +3,9 @@ import {View, Text, Pressable, ScrollView} from 'react-native';
 import styles from '../scripts/style';
 import TopBar from "./TopBar";
 import NavBar from "./NavBar";
+import {saveLanguage} from "../scripts/api";
 
-const NewLanguageBody = ({ navigation, route }) => {
-    const { saveLanguage } = route.params;
-
+const NewLanguageBody = ({ navigation }) => {
     return (
         <View style={{ flex: 1 }}>
             <TopBar navigation={navigation}/>
@@ -20,6 +19,15 @@ const NewLanguageBody = ({ navigation, route }) => {
                     }}
                 >
                     <Text>German</Text>
+                </Pressable>
+                <Pressable
+                    style={styles.button}
+                    onPress={() => {
+                        saveLanguage('Russian');
+                        navigation.navigate('LanguagePage');
+                    }}
+                >
+                    <Text>Russian</Text>
                 </Pressable>
                 <Pressable
                     style={styles.button}
@@ -38,6 +46,15 @@ const NewLanguageBody = ({ navigation, route }) => {
                     }}
                 >
                     <Text>Japanese</Text>
+                </Pressable>
+                <Pressable
+                    style={styles.button}
+                    onPress={() => {
+                        saveLanguage('Chinese');
+                        navigation.navigate('LanguagePage');
+                    }}
+                >
+                    <Text>Chinese</Text>
                 </Pressable>
             </ScrollView>
             <NavBar navigation={navigation}/>

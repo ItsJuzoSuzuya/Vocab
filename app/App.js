@@ -7,6 +7,7 @@ import {TopicBody} from "./CustomComponents/TopicBody";
 import NewLanguageBody from "./CustomComponents/NewLanguageBody";
 import NewTopicBody from "./CustomComponents/NewTopicBody";
 import {ModeBody} from "./CustomComponents/ModeBody";
+import {WordBody} from "./CustomComponents/WordBody";
 
 
 const Stack = createNativeStackNavigator();
@@ -20,6 +21,7 @@ const App = () => {
                 <Stack.Screen name='TopicPage' component={TopicBody} options={{ headerShown: false }}/>
                 <Stack.Screen name='NewTopic' component={NewTopicBody} options={{ headerShown: false }} />
                 <Stack.Screen name='ModePage' component={ModeBody} options={{ headerShown: false }} />
+                <Stack.Screen name='WordPage' component={WordBody} options={{ headerShown: false }} />
                 <Stack.Screen name='ProfilePage' component={ProfileBody} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>

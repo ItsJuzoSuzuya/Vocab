@@ -4,24 +4,50 @@ import TopBar from "./TopBar";
 import NavBar from "./NavBar";
 import styles from "../scripts/style"
 import {fetchData} from "../scripts/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const TopicBody = ({navigation, route}) => {
     const {currentLanguage} = route.params;
     const [topics, setTopics] = useState([]);
 
     useEffect(() => {
-        const storedTopics = localStorage.getItem(currentLanguage + 'topics');
-        if (storedTopics) {
-            setTopics(JSON.parse(storedTopics));
+        const getTopics = async () => {
+            try {
+                const storedTopics = await AsyncStorage.getItem(currentLanguage + 'topics');
+                console.log(storedTopics);
+                if (storedTopics) {
+                    setTopics(JSON.parse(storedTopics));
+                }
+            } catch (e) {
+                console.log(e);
+            }
         }
+
+        getTopics();
+
+        // fetchData('getTopics', {language: currentLanguage}).then(data => {
+        //     syncTopics(data)
+        // });
     }, []);
-    function saveTopic(topic){
-        fetchData('saveTopic',{topic: topic, language: currentLanguage});
+
+    async function saveTopic(topic) {
+        //await fetchData('saveTopic', {topic: topic, language: currentLanguage});
         if (!topics.includes(topic)) {
             const updatedTopics = [...topics, topic];
             localStorage.setItem(currentLanguage + 'topics', JSON.stringify(updatedTopics));
             setTopics(updatedTopics);
         }
+    }
+
+    function syncTopics(dbData) {
+        let topicSet = new Set(topics);
+        for (let item of dbData) {
+            if (!topicSet.has(item)) {
+                topicSet.add(item);
+            }
+        }
+        console.log(topicSet)
+        setTopics(Array.from(topicSet));
     }
 
     const TopicButton = ({ topic }) => {

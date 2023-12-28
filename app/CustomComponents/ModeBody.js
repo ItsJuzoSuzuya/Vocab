@@ -12,7 +12,7 @@ export const ModeBody = ({navigation, route}) => {
             <ScrollView style={styles.body}>
                 <Text> Select The Mode </Text>
 
-                <Pressable style={styles.button} onPress={() => navigation.navigate('WordPage', route)}>
+                <Pressable style={styles.button} onPress={() => navigation.navigate('WordPage', route.params)}>
                     <Text> Show List </Text>
                 </Pressable>
                 <Pressable style={styles.button} onPress={() => navigation.navigate('WordPage', route)}>

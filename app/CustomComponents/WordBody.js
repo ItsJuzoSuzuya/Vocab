@@ -3,45 +3,46 @@ import { View, Text, Pressable, ScrollView } from "react-native";
 import TopBar from "./TopBar";
 import NavBar from "./NavBar";
 import styles from "../scripts/style"
-import {getLanguages, saveLanguage} from "../scripts/api"
+import { fetchData } from "../scripts/api"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const LanguageBody = ({navigation}) => {
-    const [languages, setLanguages] = useState([]);
+export const WordBody = ({navigation, route}) => {
+    const [words, setWords] = useState([]);
+    const { currentLanguage, currentTopic }  = route.params;
 
     useEffect(  () => {
-        const getLocalLanguages = async () => {
+        const getWords = async () => {
             try {
-                const storedLanguages = await AsyncStorage.getItem('languages');
-                console.log(storedLanguages);
-                if (storedLanguages) {
-                    setLanguages(JSON.parse(storedLanguages));
+                const storedWords = await AsyncStorage.getItem('Words');
+                console.log(storedWords);
+                if (storedWords) {
+                    setWords(JSON.parse(storedWords));
                 }
             } catch (e) {
                 console.log(e);
             }
         }
 
-        getLocalLanguages();
+        getWords();
 
-        getLanguages().then(data => {
-            syncLanguages(data)
-        });
+        // fetchData('getWords').then(data => {
+        //     syncWords(data)
+        // });
 
     }, []);
 
-    async function saveLanguageToDB(language) {
-        if (!languages.includes(language)) {
-            await saveLanguage(language);
-            const updatedLanguages = [...languages, language];
-            await AsyncStorage.setItem('languages', JSON.stringify(updatedLanguages));
+    async function saveWord(language) {
+        //await fetchData('saveWord', {language: language});
+        if (!words.includes(language)) {
+            const updatedWords = [...words, language];
+            await AsyncStorage.setItem('Words', JSON.stringify(updatedWords));
 
-            setLanguages(updatedLanguages);
+            setWords(updatedWords);
         }
     }
 
-    function syncLanguages(dbData) {
-        let langSet = new Set(languages);
+    function syncWords(dbData) {
+        let langSet = new Set(words);
         console.log()
         for (let item of dbData) {
             if (!langSet.has(item)) {
@@ -49,7 +50,7 @@ export const LanguageBody = ({navigation}) => {
             }
         }
 
-        setLanguages(Array.from(langSet));
+        setWords(Array.from(langSet));
     }
 
     const LanguageButton = ({language}) => {
@@ -69,10 +70,10 @@ export const LanguageBody = ({navigation}) => {
             <TopBar navigation={navigation}/>
             <ScrollView style={styles.body}>
                 <Text> Welcome! </Text>
-                {languages.map((language) => (
+                {words.map((language) => (
                     <LanguageButton language={language} />
                 ))}
-                <Pressable style={styles.button} onPress={() => navigation.navigate('NewLanguage', { saveLanguageToDB })}>
+                <Pressable style={styles.button} onPress={() => navigation.navigate('NewLanguage', { saveLanguage })}>
                     <Text> + Add Language</Text>
                 </Pressable>
             </ScrollView>
