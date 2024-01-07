@@ -1,9 +1,11 @@
 export function saveLanguage(language) {
     let formBody = {
-            requestData: language,
+            requestData: {
+                language: language,
+            }
         };
 
-    return fetch('http://localhost:3000/language', {
+    return fetch('http://192.168.178.24:3000/language', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
@@ -38,7 +40,7 @@ export function saveLanguage(language) {
 }
 
 export function getLanguages(){
-    return fetch('http://localhost:8080/language')
+    return fetch('http://192.168.178.24:8080/language')
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -51,7 +53,7 @@ export function getLanguages(){
 }
 
 export function getTopics(language){
-    return fetch('http://localhost:8080/topic?language=' + language)
+    return fetch('http://192.168.178.24:8080/topic?language=' + language)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);

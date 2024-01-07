@@ -2,10 +2,6 @@
 mysqldata/
 app/.expo/
 app/node_modules/
-app/package-lock.json
-app/package.json
 app/metro.config.js
 app/yarn.lock
 proxy/node_modules
-proxy/package-lock.json
-proxy/package.json

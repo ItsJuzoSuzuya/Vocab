@@ -25,20 +25,22 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode('/', $uri);
 $endpoint = $uri[1];
 
-$requestData = isset($_POST['requestData']) ? json_decode(($_POST['requestData']), true) : null;
+$inputJSON = file_get_contents('php://input');
+$data = json_decode($inputJSON, TRUE);
+$data = $data["requestData"];
 
-handleRequest($requestMethod, $endpoint, $requestData);
+handleRequest($requestMethod, $endpoint, $data);
 
-function handleRequest($requestMethod, $endpoint, $requestData) {
+function handleRequest($requestMethod, $endpoint, $data) {
     global $conn;
 
     switch ($requestMethod) {
         case 'GET':
-            handleGETRequest($endpoint, $requestData);
+            handleGETRequest($endpoint, $data);
             break;
 
         case 'POST':
-            handlePOSTRequest($endpoint, $requestData);
+            handlePOSTRequest($endpoint, $data);
             break;
 
         default:
@@ -49,7 +51,7 @@ function handleRequest($requestMethod, $endpoint, $requestData) {
     $conn->close();
 }
 
-function handleGETRequest($endpoint, $requestData) {
+function handleGETRequest($endpoint, $data) {
     global $conn;
 
     switch ($endpoint) {
@@ -65,7 +67,7 @@ function handleGETRequest($endpoint, $requestData) {
             break;
 
         case 'topic':
-            $language = $requestData["language"];
+            $language = $data["language"];
             $langID = 0;
             $topics = Array();
 
@@ -89,12 +91,12 @@ function handleGETRequest($endpoint, $requestData) {
     }
 }
 
-function handlePOSTRequest($endpoint, $requestData) {
+function handlePOSTRequest($endpoint, $data) {
     global $conn;
 
     switch ($endpoint) {
         case 'language':
-            $language = $requestData["language"];
+            $language = $data["language"];
             $insertLanguage = $conn->prepare("
                 INSERT INTO languages(language)
                 SELECT ? WHERE NOT EXISTS (SELECT * FROM languages WHERE language = ?)");
@@ -102,12 +104,13 @@ function handlePOSTRequest($endpoint, $requestData) {
             $insertLanguage->bind_param("ss", $language, $language);
             executeAndClose($insertLanguage);
 
+            echo json_encode(["language added" => true]);
             http_response_code(204);
             break;
 
         case 'topic':
-            $topic = $requestData["topic"];
-            $language = $requestData["language"];
+            $topic = $data["topic"];
+            $language = $data["language"];
             $langID = 0;
 
             $selectLangID = $conn->prepare("SELECT langID FROM languages WHERE language = ?");

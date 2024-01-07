@@ -31,7 +31,6 @@ export const TopicBody = ({navigation, route}) => {
     }, []);
 
     async function saveTopic(topic) {
-        //await fetchData('saveTopic', {topic: topic, language: currentLanguage});
         if (!topics.includes(topic)) {
             const updatedTopics = [...topics, topic];
             localStorage.setItem(currentLanguage + 'topics', JSON.stringify(updatedTopics));

@@ -19,7 +19,7 @@ app.post('*', (req, res) => {
     const endpoint = requestPath.substring(1);
     const destinationURL = `http://web:8080/${endpoint}`;
 
-    console.log(endpoint);
+    console.log(requestData);
 
     request.post(
         {

@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const LanguageBody = ({navigation}) => {
     const [languages, setLanguages] = useState([]);
 
-    useEffect(  () => {
+    useEffect(() => {
         const getLocalLanguages = async () => {
             try {
                 const storedLanguages = await AsyncStorage.getItem('languages');
@@ -25,7 +25,11 @@ export const LanguageBody = ({navigation}) => {
         getLocalLanguages();
 
         getLanguages().then(data => {
-            syncLanguages(data)
+            console.log(data);
+            console.log(languages);
+            if (languages === data) {
+                syncLanguages(data);
+            } else setLanguages(data);
         });
 
     }, []);
@@ -34,15 +38,14 @@ export const LanguageBody = ({navigation}) => {
         if (!languages.includes(language)) {
             await saveLanguage(language);
             const updatedLanguages = [...languages, language];
-            await AsyncStorage.setItem('languages', JSON.stringify(updatedLanguages));
-
             setLanguages(updatedLanguages);
+            await AsyncStorage.setItem('languages', JSON.stringify(updatedLanguages));
         }
     }
 
     function syncLanguages(dbData) {
         let langSet = new Set(languages);
-        console.log()
+        console.log("lol");
         for (let item of dbData) {
             if (!langSet.has(item)) {
                 langSet.add(item);
@@ -72,7 +75,8 @@ export const LanguageBody = ({navigation}) => {
                 {languages.map((language) => (
                     <LanguageButton language={language} />
                 ))}
-                <Pressable style={styles.button} onPress={() => navigation.navigate('NewLanguage', { saveLanguageToDB })}>
+                <Pressable style={styles.button} onPress={() => {
+                    navigation.navigate('NewLanguage')}}>
                     <Text> + Add Language</Text>
                 </Pressable>
             </ScrollView>

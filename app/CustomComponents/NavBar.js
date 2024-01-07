@@ -1,7 +1,7 @@
 import { Pressable, View, StyleSheet } from "react-native";
 import React from "react";
 import { faHome, faPlus, faCog } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 
 const NavBar = ({navigation}) =>{
